@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Noël</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+            color: #000;
+            text-align: center;
+        }
+
+        header {
+            background-color: #ff0000;
+            padding: 20px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 3px 3px 5px #000;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.2rem;
+            color: #fff;
+            background-color: #cc0000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .button:hover {
+            background-color: #a30000;
+            transform: scale(1.1);
+        }
+
+        .riddle {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            transition: transform 0.3s;
+        }
+
+        .riddle:hover {
+            transform: scale(1.03);
+        }
+
+        .riddle p {
+            color: #000;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .option-button {
+            padding: 10px;
+            border: none;
+            background-color: #ff0000;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .option-button:hover {
+            background-color: #cc0000;
+            transform: scale(1.1);
+        }
+
+        .option-button.correct {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .option-button.incorrect {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .final-page {
+            display: none;
+            margin-top: 50px;
+        }
+
+        .final-page h2 {
+            color: #ff0000;
+            text-shadow: 3px 3px 5px #000;
+        }
+
+        #score {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>🎄 Quiz de Noël - Choisissez votre défi ! 🎅</header>
+    <div class="container" id="start-screen">
+        <button class="button" onclick="startQuiz('enigmes')">Énigmes</button>
+        <button class="button" onclick="startQuiz('culture')">Culture Générale</button>
+    </div>
+    <div class="container" id="quiz" style="display:none;">
+        <div id="score">Score : <span id="score-value">0</span>/10</div>
+        <div id="question-container">
+            <!-- Les questions seront générées ici dynamiquement -->
+        </div>
+    </div>
+    <div class="final-page" id="final">
+        <h2>🎉 Félicitations ! 🎉</h2>
+        <p id="final-message"></p>
+        <button class="button" onclick="window.location.href='Page-Finale.html';">Fin</button>
+    </div>
+
+    <script>
+        const enigmes = [
+            { question: "Qu'est-ce qui doit être cassé avant de pouvoir être utilisé ?", options: ["Un verre", "Un oeuf", "Une noix", "Une fenêtre"], answer: "Un oeuf" },
+            { question: "Je suis grand quand je suis jeune, et petit quand je suis vieux. Que suis-je ?", options: ["Une flamme", "Un arbre", "Une bougie", "Un nuage"], answer: "Une bougie" },
+            { question: "J'ai beaucoup de clés mais je ne peux ouvrir aucune serrure. Que suis-je ?", options: ["Un piano", "Un trousseau", "Un coffre", "Un clavier"], answer: "Un piano" },
+            { question: "Je peux voyager autour du monde tout en restant dans le même coin. Que suis-je ?", options: ["Une valise", "Un timbre", "Une pièce de monnaie", "Un billet d'avion"], answer: "Un timbre" },
+            { question: "Plus vous en prenez, plus vous en laissez derrière. Que suis-je ?", options: ["Des pas", "Du sable", "Du temps", "Des empreintes"], answer: "Des pas" },
+        ];
+
+        const culture = [
+        
+    { question: "Quelle est la capitale de l'Égypte ?", options: ["Le Caire", "Alexandrie", "Carthage", "Tunis"], answer: "Le Caire" },
+    { question: "Quelle est la durée de l'année tropique en jours ?", options: ["365,24", "365,25", "365,26", "365,27"], answer: "365,24" },
+    { question: "Quel est le plus grand désert du monde ?", options: ["Sahara", "Gobi", "Arctique", "Antarctique"], answer: "Antarctique" },
+    { question: "Dans quelle période s'est produite la guerre de Trente Ans ?", options: ["1618-1648", "1492-1515", "1789-1815", "1939-1945"], answer: "1618-1648" },
+    { question: "Quel est le plus haut sommet d'Afrique ?", options: ["Mont Kilimandjaro", "Mont Kenya", "Mont Rwenzori", "Mont Elbrouz"], answer: "Mont Kilimandjaro" },
+    { question: "Quel est l'élément chimique dont le symbole est Fe ?", options: ["Fer", "Fermium", "Fluor", "Phosphore"], answer: "Fer" },
+    { question: "Qui a écrit la Divine Comédie ?", options: ["Dante Alighieri", "Geoffrey Chaucer", "Homer", "William Shakespeare"], answer: "Dante Alighieri" },
+    { question: "Quelle est la plus grande île du monde ?", options: ["Groenland", "Bornéo", "Nouvelle-Guinée", "Madagascar"], answer: "Groenland" },
+    { question: "Quel traité a mis fin à la Première Guerre mondiale ?", options: ["Traité de Versailles", "Traité de Brest-Litovsk", "Traité de Saint-Germain", "Traité de Trianon"], answer: "Traité de Versailles" },
+    { question: "Quel scientifique a formulé la théorie de la relativité ?", options: ["Albert Einstein", "Isaac Newton", "Galileo Galilei", "Nicolaus Copernicus"], answer: "Albert Einstein" },
+    { question: "Dans quel pays trouve-t-on les Moaïs ?", options: ["Nouvelle-Zélande", "Pérou", "Îles de Pâques", "Tonga"], answer: "Îles de Pâques" },
+    { question: "Quel est le plus grand océan du monde ?", options: ["Pacifique", "Atlantique", "Indien", "Arctique"], answer: "Pacifique" },
+    { question: "Combien y a-t-il de membres permanents au Conseil de sécurité de l'ONU ?", options: ["5", "10", "15", "20"], answer: "5" },
+    { question: "Quel est l'élément chimique dont le symbole est Hg ?", options: ["Mercure", "Hydrogène", "Holmium", "Manganèse"], answer: "Mercure" },
+    { question: "Qui a découvert l'Amérique ?", options: ["Christophe Colomb", "Leif Erikson", "Ferdinand Magellan", "Vasco de Gama"], answer: "Christophe Colomb" },
+    { question: "Dans quelle bataille Napoléon a-t-il été défait pour la première fois ?", options: ["Bataille d'Austerlitz", "Bataille de Waterloo", "Bataille de Leipzig", "Bataille de Moscou"], answer: "Bataille de Waterloo" },
+    { question: "Quelle est la capitale de la Chine ?", options: ["Pékin", "Shanghai", "Hong Kong", "Shenzhen"], answer: "Pékin" },
+    { question: "Qui a peint la scène de la création d'Adam dans la Chapelle Sixtine ?", options: ["Michel-Ange", "Raphaël", "Leonardo da Vinci", "Caravage"], answer: "Michel-Ange" },
+    { question: "Quel est le plus grand lac d'eau douce du monde ?", options: ["Supérieur", "Victoria", "Baïkal", "Tanganyika"], answer: "Supérieur" },
+    { question: "Quel est l'auteur de l'ouvrage '1984' ?", options: ["George Orwell", "Aldous Huxley", "Ray Bradbury", "Philip K. Dick"], answer: "George Orwell" },
+    { question: "Quel est le plus long fleuve de l'Asie ?", options: ["Yangtsé", "Mékong", "Gange", "Jaune"], answer: "Yangtsé" },
+    { question: "Quelle est la devise officielle de l'Union européenne ?", options: ["Liberté, Égalité, Fraternité", "Unis dans la diversité", "Plus unis que jamais", "Solidarité, liberté, démocratie"], answer: "Unis dans la diversité" },
+    { question: "Dans quelle bataille le D-Day a-t-il eu lieu ?", options: ["Bataille de Normandie", "Bataille de Bulge", "Bataille de la Somme", "Bataille de Verdun"], answer: "Bataille de Normandie" },
+    { question: "Quelle est la capitale de l'Argentine ?", options: ["Buenos Aires", "Cordoba", "Rosario", "Mendoza"], answer: "Buenos Aires" },
+    { question: "Qui a fondé la République populaire de Chine ?", options: ["Mao Zedong", "Deng Xiaoping", "Sun Yat-sen", "Xi Jinping"], answer: "Mao Zedong" },
+    { question: "Quel est le plus grand empire de l'histoire ?", options: ["Empire Britannique", "Empire Romain", "Empire Mongol", "Empire Ottoman"], answer: "Empire Britannique" },
+    { question: "Dans quel océan se trouve le Triangle des Bermudes ?", options: ["Atlantique", "Pacifique", "Indien", "Arctique"], answer: "Atlantique" },
+    { question: "Quel scientifique a formulé la théorie de la gravitation universelle ?", options: ["Isaac Newton", "Galileo Galilei", "Albert Einstein", "Johannes Kepler"], answer: "Isaac Newton" },
+    { question: "Quel traité a mis fin à la Seconde Guerre mondiale ?", options: ["Traité de Paris", "Traité de Londres", "Traité de Versailles", "Charter des Nations Unies"], answer: "Charter des Nations Unies" },
+    { question: "Quelle est la capitale du Canada ?", options: ["Ottawa", "Toronto", "Vancouver", "Montreal"], answer: "Ottawa" },
+    { question: "Qui a peint 'La Liberté guidant le peuple' ?", options: ["Eugène Delacroix", "Jean-François Millet", "Gustave Courbet", "Jules Breton"], answer: "Eugène Delacroix" },
+    { question: "Quel est le plus grand mammifère terrestre ?", options: ["Éléphant", "Rhinocéros", "Gorille", "Bison"], answer: "Éléphant" },
+    { question: "Dans quelle bataille Hannibal a-t-il été vaincu ?", options: ["Bataille de Zama", "Bataille de Canne", "Bataille de Syracuse", "Bataille de Gaugamèles"], answer: "Bataille de Zama" },
+    { question: "Quel est le plus grand insecte du monde ?", options: ["Goliath", "Sauterelle géante", "Termite de forêt tropicale", "Tyranoptère de l'île de Borneo"], answer: "Goliath" },
+    { question: "Quel est le plus grand mammifère marin ?", options: ["Baleine bleue", "Baleine à bosse", "Narval", "Dauphin"], answer: "Baleine bleue" },
+    { question: "Quel est le plus grand volcan d'Europe ?", options: ["Etna", "Piton de la Fournaise", "Vésuve", "Mont Saint Helens"], answer: "Etna" },
+    { question: "Dans quelle bataille a eu lieu la reddition de Napoléon ?", options: ["Bataille de Leipzig", "Bataille de Waterloo", "Bataille de l'île d'Aix", "Bataille de Moscou"], answer: "Bataille de Waterloo" },
+    { question: "Quelle est la capitale du Chili ?", options: ["Santiago", "Valparaíso", "Concepción", "Antofagasta"], answer: "Santiago" },
+    { question: "Dans quel océan se trouve l'île de Madagascar ?", options: ["Indien", "Atlantique", "Pacifique", "Arctique"], answer: "Indien" },
+    { question: "Quelle bataille a été la plus meurtrière de la Première Guerre mondiale ?", options: ["Bataille de la Somme", "Bataille de Verdun", "Bataille de Gallipoli", "Bataille de la Marne"], answer: "Bataille de Verdun" },
+    { question: "Quel est le plus grand peuple indigène d'Amazonie ?", options: ["Yanomami", "Kayapo", "Guarani", "Huitoto"], answer: "Yanomami" }
+];
+
+       
+
+        let score = 0;
+        let currentQuestionIndex = 0;
+        let currentQuiz = [];
+
+        function startQuiz(type) {
+            if (type === 'culture') {
+                currentQuiz = culture.sort(() => Math.random() - 0.5).slice(0, 10);
+            } else {
+                currentQuiz = enigmes;
+            }
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('quiz').style.display = 'block';
+            score = 0;
+            currentQuestionIndex = 0;
+            updateScore();
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const questionData = currentQuiz[currentQuestionIndex];
+            const questionContainer = document.getElementById('question-container');
+            questionContainer.innerHTML = `
+                <div class="riddle">
+                    <p><strong
+                    ><span>Question ${currentQuestionIndex + 1} :</span></strong> ${questionData.question}</p>
+                    <div class="options">
+                        ${questionData.options.map((option, index) => `
+                            <button class="option-button" onclick="checkAnswer('${option}', this)">${option}</button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkAnswer(selectedOption, buttonElement) {
+            const questionData = currentQuiz[currentQuestionIndex];
+            if (selectedOption === questionData.answer) {
+                buttonElement.classList.add('correct');
+                score++;
+            } else {
+                buttonElement.classList.add('incorrect');
+            }
+            updateScore();
+            setTimeout(() => {
+                if (currentQuestionIndex < currentQuiz.length - 1) {
+                    currentQuestionIndex++;
+                    showQuestion();
+                } else {
+                    endQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateScore() {
+            document.getElementById('score-value').textContent = score;
+        }
+
+        function endQuiz() {
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('final').style.display = 'block';
+            const message = score >= 7 
+                ? "Superbe performance ! Vous avez brillamment réussi le quiz."
+                : "Bon effort ! Continuez à vous améliorer et essayez encore.";
+            document.getElementById('final-message').textContent = `Vous avez obtenu ${score} / 10. ${message}`;
+        }
+    </script>
+</body>
+</html>

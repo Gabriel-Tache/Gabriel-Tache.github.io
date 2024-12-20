@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page-Finale</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            text-align: center;
+        }
+
+        header {
+            background-color: #ff0000;
+            padding: 50px;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        .carousel {
+            position: relative;
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border: 2px solid #007BFF;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .carousel img {
+            width: 100%;
+            display: block;
+            transition: transform 0.5s ease;
+            object-fit: cover;
+        }
+
+        .carousel .indicators {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+        }
+
+        .carousel .indicator {
+            width: 10px;
+            height: 10px;
+            background-color: #bbb;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .carousel .indicator.active {
+            background-color: #007BFF;
+            
+        }
+
+        .carousel-controls {
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+        }
+
+        .carousel-control {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-size: 2rem;
+            padding: 10px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .carousel-control:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <header>Joyeux Noel !</header>
+    <div class="carousel">
+        <img src="C:\Users\gabri\Downloads\IMG_2661.jpg" alt="Photo 1" class="active">
+        <img src="C:\Users\gabri\Downloads\IMG_1704.jpg" alt="Photo 2">
+        <img src="C:\Users\gabri\Downloads\IMG_1395.jpg" alt="Photo 3">
+        <img src="C:\Users\gabri\Downloads\df06b4d5-6ddf-4ac4-a73c-2c31972b5dda.JPG" alt="Photo 4">
+        <div class="indicators">
+            <div class="indicator active" onclick="goToSlide(0)"></div>
+            <div class="indicator" onclick="goToSlide(1)"></div>
+            <div class="indicator" onclick="goToSlide(2)"></div>
+            <div class="indicator" onclick="goToSlide(3)"></div>
+        </div>
+    </div>
+    <div class="carousel-controls">
+        <button class="carousel-control" onclick="prevSlide()">❮</button>
+        <button class="carousel-control" onclick="nextSlide()">❯</button>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const images = document.querySelectorAll('.carousel img');
+        const indicators = document.querySelectorAll('.indicator');
+
+        function nextSlide() {
+            images[currentIndex].classList.remove('active');
+            indicators[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % images.length;
+            images[currentIndex].classList.add('active');
+            indicators[currentIndex].classList.add('active');
+            updateTransform();
+        }
+
+        function prevSlide() {
+            images[currentIndex].classList.remove('active');
+            indicators[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            images[currentIndex].classList.add('active');
+            indicators[currentIndex].classList.add('active');
+            updateTransform();
+        }
+
+        function goToSlide(index) {
+            images[currentIndex].classList.remove('active');
+            indicators[currentIndex].classList.remove('active');
+            currentIndex = index;
+            images[currentIndex].classList.add('active');
+            indicators[currentIndex].classList.add('active');
+            updateTransform();
+        }
+
+        function updateTransform() {
+            const offset = -currentIndex * 100; // Calcule l'offset en pourcentage
+            images.forEach(img => {
+                img.style.transform = `translateX(${offset}%)`;
+            });
+        }
+
+        setInterval(nextSlide, 3000); // Change image every 3 seconds
+    </script>
+</body>
+</html>
